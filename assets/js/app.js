@@ -6,6 +6,12 @@ var intro = document.querySelector('#intro');
 var questionContainer = document.querySelector('#questionContainer');
 var questionText = document.querySelector('#question');
 var choicesContainer = document.querySelector('#choices');
+var resultsContainer = document.querySelector('#quizResults');
+var finalScore = document.querySelector('#finalScore');
+var initials = document.querySelector('#yourInitials');
+var submitScore = document.querySelector('#submitScore');
+var scoresContainer = document.querySelector('#highSchores');
+var scoresList = document.querySelector('#scoresList');
 
 // Initialize global variable
 // Set current question to -1 so we can have loadQuestion function queue up question 0
@@ -116,8 +122,11 @@ function nextQuestion() {
 }
 
 //Ends the quiz and calculates score
-
 function endQuiz() {
+    // Hide the question div
+    questionContainer.style.display = "none";
 
+    
+    
 }
 
