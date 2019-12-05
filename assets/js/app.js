@@ -3,6 +3,9 @@ var quizContainer = document.querySelector('#quizContainer');
 var startBtn = document.querySelector('#startQuiz');
 var timerContainer = document.querySelector('#timeLeft');
 var intro = document.querySelector('#intro');
+var questionContainer = document.querySelector('#questionContainer');
+var questionText = document.querySelector('#question');
+var choicesContainer = document.querySelector('#choices');
 
 // Initialize global variables
 var currentQuestion = 0;
@@ -15,6 +18,7 @@ timerContainer.textContent = timeLeft;
 
 // Add a listener to the Start button
 startBtn.addEventListener('click', startQuiz);
+questionContainer.addEventListener('click',checkAnswer);
 
 function startQuiz(e) {
     intro.style.display = "none";
@@ -23,23 +27,17 @@ function startQuiz(e) {
 
 function loadQuestion() {
     var currentQuestionInfo = questions[currentQuestion];
-    var newRow = document.createElement('div');
-    newRow.setAttribute('id',currentQuestion);
-
-    var newQuestion = document.createElement('h3');
-    newQuestion.textContent = currentQuestionInfo.title;
-
-    newRow.appendChild(newQuestion);
+    questionText.textContent = currentQuestionInfo.title;
 
     for (var i = 0; i < currentQuestionInfo.choices.length; i++) {
         var newChoice = document.createElement('div');
         newChoice.setAttribute('class','choice');
         var newButton = document.createElement('button');
+        newButton.setAttribute('class','btn btn-secondary');
         newButton.textContent = currentQuestionInfo.choices[i];
         newChoice.appendChild(newButton);
-        newRow.appendChild(newChoice);
+        choicesContainer.appendChild(newChoice);
     }
-
-    quizContainer.appendChild(newRow);
+    questionContainer.style.display = "block";
     
 }
