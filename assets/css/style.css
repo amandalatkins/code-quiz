@@ -4,4 +4,19 @@
 
 .choice {
     margin: 0.5em 0;
+    position:relative
+}
+
+.choice .btn-success:before {
+    font-family: "FontAwesome";
+    content: "\f00c";
+    position: absolute;
+    left: 25px;
+}
+
+.choice .btn-danger:before {
+    font-family: "FontAwesome";
+    content: "\f00d";
+    position: absolute;
+    left: 25px;
 }

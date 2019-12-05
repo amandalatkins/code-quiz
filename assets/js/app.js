@@ -7,12 +7,14 @@ var questionContainer = document.querySelector('#questionContainer');
 var questionText = document.querySelector('#question');
 var choicesContainer = document.querySelector('#choices');
 
-// Initialize global variables
+// Initialize global variable
 // Set current question to -1 so we can have loadQuestion function queue up question 0
 var currentQuestion = -1;
+var currentQuestionInfo;
 
 // This will hold the time left. Set the starting time based on how many questions there are.
 var timeLeft = questions.length * 15;
+var score = 0;
 
 // Go ahead and show the total time on the frontend
 timerContainer.textContent = timeLeft;
@@ -39,7 +41,12 @@ function loadQuestion() {
     //Load the next question
     currentQuestion++;
 
-    var currentQuestionInfo = questions[currentQuestion];
+    // if currentQuestion is equal to the length of questions then the quiz is over
+    if (currentQuestion == questions.length) {
+        return endQuiz();
+    }
+
+    currentQuestionInfo = questions[currentQuestion];
     questionText.textContent = currentQuestionInfo.title;
 
     // for each answer choice, do the following...
@@ -70,10 +77,10 @@ function checkAnswer(e) {
     //Get the click target
     var target = e.target;
     
-    //If the part of the container that was clicked on was a button
+    //If the part of the container that was clicked was a button
     if (target.matches('button')) {
         //Check the textContent of that button against the answer
-        if (target.textContent == questions[currentQuestion].answer) {
+        if (target.textContent == currentQuestionInfo.answer) {
             logCorrectAnswer(target);
         } else {
             logIncorrectAnswer(target);
@@ -82,9 +89,35 @@ function checkAnswer(e) {
 }
 
 function logCorrectAnswer(target) {
-
+    target.classList.add('btn-success');
+    score++;
+    nextQuestion();
 }
 
 function logIncorrectAnswer(target) {
-    
+    target.classList.add('btn-danger');
+
+    //Let's also highlight what the correct answer was
+    var options = document.querySelectorAll('.choice');
+    for (var i = 0; i < options.length; i++) {
+        if (options[i].children[0].textContent == currentQuestionInfo.answer) {
+            options[i].children[0].classList.add('btn-success');
+        }
+    }
+    score++;
+    nextQuestion();
 }
+
+//calls the loadQuestion function after 1 second
+function nextQuestion() {
+    setTimeout(function() {
+        loadQuestion();
+    }, 1000);
+}
+
+//Ends the quiz and calculates score
+
+function endQuiz() {
+
+}
+
