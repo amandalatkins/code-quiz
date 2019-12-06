@@ -248,13 +248,9 @@ function saveScore(e) {
 
     //Now based on which quiz, let's store our score
     if (activeQuiz == "JavaScript") {
-        console.log('active quiz is javascript');
         if (highScores.jsquiz) {
-            console.log('found some scores for js already');
             highScores.jsquiz.push(saveScoreArray());
         } else {
-            console.log('no js, saving into new node');
-            console.log(yourInitials.value+ ": "+finalScore.textContent);
             highScores.jsquiz = [saveScoreArray()];
         }
 
@@ -265,8 +261,6 @@ function saveScore(e) {
             highScores.caquiz = [saveScoreArray()];
         }
     }  
-
-    console.log(highScores);
     
     localStorage.setItem('scores',JSON.stringify(highScores));
     localStorage.setItem('test','test');
@@ -275,7 +269,6 @@ function saveScore(e) {
 }
 
 function saveScoreArray() {
-    console.log('setting up score array');
     return {
         initials: yourInitials.value,
         score: finalScore.textContent
@@ -285,15 +278,41 @@ function saveScoreArray() {
 function showHighScores() {
     hideAllDivs();
     theScores.innerHTML = "";
-    var getScores = localStorage.getItem('scores');
+    var getScores = JSON.parse(localStorage.getItem('scores'));
     scoresContainer.style.display = "block";
     if (!getScores) {
         var newP = document.createElement('p');
         newP.textContent = "No high scores saved!";
         theScores.appendChild(newP);
-    }
+    } else {
+        var newH4 = document.createElement('h4');
+        newH4.textContent = "JavaScript Quiz Scores";
+        theScores.append(newH4);
+        var newUl = document.createElement('ul');
+        generateScoresLi(newUl, getScores.jsquiz);
+        theScores.append(newUl);
 
-    
+        var secondH4 = document.createElement('h4');
+        secondH4.textContent = "California Quiz Scores";
+        theScores.append(secondH4);
+        var secondUl = document.createElement('ul');
+        generateScoresLi(secondUl, getScores.caliquiz);
+        theScores.append(secondUl);
+    }
+}
+
+function generateScoresLi(ul, scores) {
+    if (scores) {
+        for (var i = 0; i < scores.length; i++) {
+            var newLi = document.createElement('li');
+            newLi.textContent = scores[i].initials + ": "+ scores[i].score;
+            ul.appendChild(newLi);
+        }
+    } else {
+        var newLi = document.createElement('li');
+        newLi.textContent = "No scores :(";
+        ul.appendChild(newLi);
+    }
 }
 
 // This function clears out the main quiz area
