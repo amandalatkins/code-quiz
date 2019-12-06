@@ -9,6 +9,7 @@ var timeLeftContainer = document.querySelector('#timeLeft');
 var codeQuizIntro = document.querySelector('#codeQuizIntro');
 var caliQuizIntro = document.querySelector('#caliQuizIntro');
 var scoresContainer = document.querySelector('#highScores');
+var introContainer = document.querySelector('#intro');
 
 var selectQuiz = document.querySelector('#selectQuiz');
 var questionText = document.querySelector('#question');
@@ -18,8 +19,9 @@ var initials = document.querySelector('#yourInitials');
 
 var startBtn = document.querySelector('#startQuiz');
 var submitScore = document.querySelector('#submitScore');
+var viewScores = document.querySelector('#viewScores');
 
-var scoresList = document.querySelector('#scoresList');
+var theScores = document.querySelector('#theScores');
 
 // This will store the active quiz
 var activeQuiz;
@@ -37,6 +39,7 @@ var timer;
 var secondsPerQuestion = 15;
 var score = 0;
 var activeQuiz;
+var highScores = [];
 
 // Add a click istener to the Start button
 // startBtn.addEventListener('click', startQuiz);
@@ -49,9 +52,9 @@ function toggleQuiz(e) {
     activeQuiz = e.target.value;
     if (activeQuiz == "JavaScript") {
 
-        // Display the correct intro
+        // Clear the page and display the correct intro
+        hideAllDivs();
         codeQuizIntro.style.display="block";
-        caliQuizIntro.style.display="none";
 
         // Set the questions and timeLeft
         questions = codeQuestions;
@@ -61,8 +64,8 @@ function toggleQuiz(e) {
 
     } else if (activeQuiz == "California") {
 
-        // Display the correct intro
-        codeQuizIntro.style.display="none";
+        // Clear the page and display the correct intro
+        hideAllDivs();
         caliQuizIntro.style.display="block";
 
         // Set the questions and timeLeft
@@ -76,10 +79,8 @@ function toggleQuiz(e) {
 function startQuiz(e) {
 
     if (e.target.matches('button')) {
-        // Hide all the intro containers
-        for(var i = 0; i < intro.children.length; i++) {
-            intro.children[i].style.display = "none";
-        }
+        // Clear the page
+        hideAllDivs();
 
         // Show the timer and set it;
         timerContainer.style.display = "block";
@@ -222,9 +223,8 @@ function endQuiz() {
     // In case the time is still running, clear it
     clearInterval(timer);
 
-    // Hide the question and timer divs
-    questionContainer.style.display = "none";
-    timerContainer.style.display = "none";
+    // Clear the page
+    hideAllDivs();
     loadQuizResults();
 }
 
@@ -236,9 +236,80 @@ function loadQuizResults() {
     resultsContainer.style.display = "block";
 }
 
+//Save the high score in local storage
+function saveScore(e) {
+    // Let's grab our stored scores
+    var getScores = localStorage.getItem('scores');
+    
+    // If there are scores stored, let's overwite our highScores array with them
+    if (getScores) {
+        highScores = JSON.parse(getScores);
+    }
+
+    // Now based on which quiz, let's store our scores
+    if (activeQuiz == "JavaScript") {
+        console.log('active quiz is javascript');
+        if (highScores.javascript) {
+            console.log('found some scores for js already');
+            highScores.javascript.push(saveScoreArray());
+        } else {
+            console.log('no js, saving into new node');
+            console.log(yourInitials.value+ ": "+finalScore.textContent);
+            highScores.javascript = [saveScoreArray()];
+        }
+
+    } else if (activeQuiz == "California") {
+        if (highScores.california) {
+            highScores.california.push(saveScoreArray());
+        } else {
+            highScores.california = [saveScoreArray()];
+        }
+    }  
+
+    console.log(highScores);
+    
+    localStorage.setItem('scores',JSON.stringify(highScores));
+
+    showHighScores();
+}
+
+function saveScoreArray() {
+    console.log('setting up score array');
+    return {
+        initials: yourInitials.value,
+        score: finalScore.textContent
+    }
+}
+
+function showHighScores() {
+    hideAllDivs();
+    theScores.innerHTML = "";
+    var getScores = localStorage.getItem('scores');
+    scoresContainer.style.display = "block";
+    if (!getScores) {
+        var newP = document.createElement('p');
+        newP.textContent = "No high scores saved!";
+        theScores.appendChild(newP);
+    }
+
+    
+}
+
+// This function clears out the main quiz area
+function hideAllDivs() {
+    introContainer.style.display = "none";
+    codeQuizIntro.style.display = "none";
+    caliQuizIntro.style.display = "none";
+    questionContainer.style.display = "none";
+    resultsContainer.style.display = "none";
+    scoresContainer.style.display = "none";
+}
+
 
 
 // All of our listeners will live here
 selectQuiz.addEventListener('change',toggleQuiz);
 codeQuizIntro.addEventListener('click',startQuiz);
 caliQuizIntro.addEventListener('click',startQuiz);
+submitScore.addEventListener('click',saveScore);
+viewScores.addEventListener('click',showHighScores);
