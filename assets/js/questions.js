@@ -1,4 +1,4 @@
-var questions = [
+var codeQuestions = [
     {
       title: "Commonly used data types DO NOT include:",
       choices: ["strings", "booleans", "alerts", "numbers"],
@@ -26,4 +26,7 @@ var questions = [
     },
 
 ];
-  
+
+var caliQuestions = [
+
+];

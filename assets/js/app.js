@@ -1,26 +1,42 @@
 // Store the HTML elements we need in variables and initalize other global variables
 var quizContainer = document.querySelector('#quizContainer');
-var startBtn = document.querySelector('#startQuiz');
-var timerContainer = document.querySelector('#timeLeft');
-var intro = document.querySelector('#intro');
 var questionContainer = document.querySelector('#questionContainer');
-var questionText = document.querySelector('#question');
 var choicesContainer = document.querySelector('#choices');
 var resultsContainer = document.querySelector('#quizResults');
+var selectQuizContainer = document.querySelector('#selectQuizContainer');
+var timerContainer = document.querySelector('#timerContainer');
+var timeLeftContainer = document.querySelector('#timeLeft');
+var codeQuizIntro = document.querySelector('#codeQuizIntro');
+var caliQuizIntro = document.querySelector('#caliQuizIntro');
+
+var scoresContainer = document.querySelector('#highScores');
+
+var questionText = document.querySelector('#question');
+
 var finalScore = document.querySelector('#finalScore');
 var initials = document.querySelector('#yourInitials');
+
+var startBtn = document.querySelector('#startQuiz');
 var submitScore = document.querySelector('#submitScore');
-var scoresContainer = document.querySelector('#highSchores');
+
 var scoresList = document.querySelector('#scoresList');
 
-// Initialize global variable
+// Initialize global variables
+
+// This will store the active quiz
+var activeQuiz;
+
 // Set current question to -1 so we can have loadQuestion function queue up question 0
 var currentQuestion = -1;
 var currentQuestionInfo;
 
+
+
 // This will hold the time left. Set the starting time based on how many questions there are.
 var timeLeft = questions.length * 15;
 var score = 0;
+
+
 
 // Go ahead and show the total time on the frontend
 timerContainer.textContent = timeLeft;
@@ -94,23 +110,24 @@ function checkAnswer(e) {
     }
 }
 
+// This function handles a correct answer
 function logCorrectAnswer(target) {
     target.classList.add('btn-success');
     score++;
     nextQuestion();
 }
 
+// This function handles an incorrect answer
 function logIncorrectAnswer(target) {
     target.classList.add('btn-danger');
 
-    //Let's also highlight what the correct answer was
+    //Let's also highlight what the correct answer was by looping all the choices until we find the one that matches the answer
     var options = document.querySelectorAll('.choice');
     for (var i = 0; i < options.length; i++) {
         if (options[i].children[0].textContent == currentQuestionInfo.answer) {
             options[i].children[0].classList.add('btn-success');
         }
-    }
-    score++;
+    }r
     nextQuestion();
 }
 
@@ -125,8 +142,14 @@ function nextQuestion() {
 function endQuiz() {
     // Hide the question div
     questionContainer.style.display = "none";
+    loadQuizResults();
+}
 
-    
-    
+//Load the quiz results
+function loadQuizResults() {
+    // Display the final score as a percentage because that's prettier
+    finalScore.textContent = (score / questions.length)*100 + "%";
+    // Now display the results container
+    resultsContainer.style.display = "block";
 }
 

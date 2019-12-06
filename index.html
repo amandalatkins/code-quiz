@@ -12,38 +12,54 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <ul class="mr-auto navbar-nav">
+        <a class="navbar-brand" id="quizTitle">Quiz Master 2019</a>
+        
+        <ul class="ml-auto navbar-nav">
             <li class="nav-item"><a href="#" id="viewScores" class="nav-link">View High Scores</a></li>
         </ul>
         
-        <ul class="ml-auto navbar-nav">
-            <li class="nav-item">Timer: <strong><span id="timeLeft" class="text-dark"></span></strong></li>
-        </ul>
+        
+
     </nav>
 
     <div class="container pt-5">
         <div class="row">
             <div class="col-md-2 col-lg-3"></div>
             <div class="col-md-8 col-lg-6" id="quizContainer">
-                <div id="intro">
-                    <h1>Coding Quiz</h1>
-                    <p class="my-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat justo id metus interdum, eu aliquam urna semper. Suspendisse elementum enim eros, sit amet ornare nisl lacinia varius. Vivamus felis leo, varius eget maximus at, sollicitudin vitae ipsum. Donec eu sagittis quam. Suspendisse potenti.</p>
-                    <p><button id="startQuiz" class="btn btn-primary">Start Quiz!</button></p>
+                <div>
+                    <div id="selectQuizContainer">
+                        <select class="form-control mx-auto" id="selectQuiz">
+                            <option value="" selected disabled>Select a quiz...</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="california">California</option>
+                        </select>
+                    </div>
+                    <p id="timerContainer">
+                        Time Left: <span class="text-danger" id="timeLeft"></span>
+                    </p>            
                 </div>
-                <div id="questionContainer" style="display:none">
+                <div id="codeQuizIntro">
+                    <h1>JavaScript Quiz</h1>
+                    <p class="my-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat justo id metus interdum, eu aliquam urna semper. Suspendisse elementum enim eros, sit amet ornare nisl lacinia varius. Vivamus felis leo, varius eget maximus at, sollicitudin vitae ipsum. Donec eu sagittis quam. Suspendisse potenti.</p>
+                    <p><button class="btn btn-primary" data-quiz-id="javascript">Start Quiz!</button></p>
+                </div>
+                <div id="caliQuizIntro">
+                    <h1>California Quiz</h1>
+                    <p class="my-3">Think you know a lot about our great state? Put your knowledge to the test with this California quiz!</p>
+                    <p><button class="btn btn-primary" data-quiz-id="california">Start Quiz!</button></p>
+                </div>
+                <div id="questionContainer">
                     <h3 id="question"></h3>
                     <div id="choices"></div>
                 </div>
-                <div id="quizResults" style="display:none">
+                <div id="quizResults">
                     <h1>Quiz Complete</h1>
                     <p class="my-3">Your score: <span id="finalScore"></span></p>
                     <input type="text" id="yourInitials" class="form-control"/><button id="submitScore" class="btn btn-primary">Submit</button>
                 </div>
-                <div id="highScores" style="display:none">
+                <div id="highScores">
                     <h1>High Scores</h1>
-                    <ul id="scoreList">
-
-                    </ul>
+                    <ul id="scoreList"></ul>
                 </div>
             </div>
             <div class="col-md-2 col-lg-3"></div>
