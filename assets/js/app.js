@@ -36,13 +36,17 @@ var currentQuestionInfo;
 // This will hold the time left. Set the starting time based on how many questions there are.
 var timeLeft;
 var timer;
-var secondsPerQuestion = 1;
+var secondsPerQuestion = 3;
 var score = 0;
 var activeQuiz;
 var highScores = {};
 
-// Add a click istener to the Start button
-// startBtn.addEventListener('click', startQuiz);
+// Setup our sound effects
+var correctSound = new Audio('assets/sounds/correct.mp3');
+var wrongSound = new Audio('assets/sounds/incorrect.mp3');
+var timeOverSound = new Audio('assets/sounds/timer_ran_out.mp3');
+var warningSound = new Audio('assets/sounds/warning.mp3');
+var successSound = new Audio('assets/sounds/quiz_end.mp3');
 
 // Add a click listener to the choicesContainer
 choicesContainer.addEventListener('click',checkAnswer);
@@ -53,7 +57,7 @@ function toggleQuiz(e) {
     if (activeQuiz == "JavaScript") {
 
         // Clear the page and display the correct intro
-        hideAllDivs();
+        clearPage();
         codeQuizIntro.style.display="block";
 
         // Set the questions and timeLeft
@@ -65,7 +69,7 @@ function toggleQuiz(e) {
     } else if (activeQuiz == "California") {
 
         // Clear the page and display the correct intro
-        hideAllDivs();
+        clearPage();
         caliQuizIntro.style.display="block";
 
         // Set the questions and timeLeft
@@ -79,8 +83,12 @@ function toggleQuiz(e) {
 function startQuiz(e) {
 
     if (e.target.matches('button')) {
-        // Clear the page
-        hideAllDivs();
+        // Clear the page and reset all the variables
+        clearPage();
+        resetVars();
+
+        // Toggle the quiz selector
+        toggleQuizSelector();
 
         // Show the timer and set it;
         timerContainer.style.display = "block";
@@ -91,24 +99,31 @@ function startQuiz(e) {
     }
 }
 
+function toggleQuizSelector() {
+
+}
+
 function setTimer() {
+    // Just in case there's an interval already set, let's clear it
+    clearInterval(timer);
+
     // set an interval to run every 1 second
     timer = setInterval(function() {
         //Subtract one from the timeLeft and display it on the frontend
         timeLeft--;
         timeLeftContainer.textContent = timeLeft;
-
-        if (timeLeft <= 3) {
             
-            if (timeLeft === 0) {
-                // PLAY GAME OVER SOUND ***
-            } else {
-                // PLAY WARNING SOUND ***
-            }
+        // If there are 10 seconds left, warn the player
+        if (timeLeft === 10) {
+            // play Retro game tone, musical warning 1
+            warningSound.play();
+            timeLeftContainer.classList.add('text-danger');
         }
 
         // When the time left gets to zero, clear the interval and end the quiz
         if (timeLeft === 0) {
+            // Play timer ran out sound
+            timeOverSound.play();
             clearInterval(timer);
             endQuiz();
         }
@@ -179,7 +194,10 @@ function logCorrectAnswer(target) {
 
     target.classList.add('btn-success');
     score++;
-    // PLAY CORRECT SOUND ***
+    
+    // Play sound
+    correctSound.play();
+
     nextQuestion();
 }
 
@@ -190,10 +208,13 @@ function logIncorrectAnswer(target) {
 
     target.classList.add('btn-danger');
 
-    // PLAY INCORRECT SOUND ***
+    // Play sound
+    wrongSound.play();
 
-    // Deduct some time from the timer
-    timeLeft += -5;
+    // Deduct some time from the timer but only if there are more than 5 seconds left
+    if (timeLeft > 5) {
+        timeLeft += -5;
+    }
 
     //Let's also highlight what the correct answer was by looping all the choices until we find the one that matches the answer
     var options = document.querySelectorAll('.choice');
@@ -223,8 +244,13 @@ function endQuiz() {
     // In case the time is still running, clear it
     clearInterval(timer);
 
+    // If the time didn't run out, let's play a happier quiz over sound
+    if (timeLeft > 0) {
+        successSound.play();
+    }
+
     // Clear the page
-    hideAllDivs();
+    clearPage();
     loadQuizResults();
 }
 
@@ -276,7 +302,8 @@ function saveScoreArray() {
 }
 
 function showHighScores() {
-    hideAllDivs();
+    clearPage();
+    resetVars();
     theScores.innerHTML = "";
     var getScores = JSON.parse(localStorage.getItem('scores'));
     scoresContainer.style.display = "block";
@@ -315,17 +342,24 @@ function generateScoresLi(ul, scores) {
     }
 }
 
-// This function clears out the main quiz area
-function hideAllDivs() {
+// This function clears the content on the main part of the quiz
+function clearPage() {
     introContainer.style.display = "none";
     codeQuizIntro.style.display = "none";
     caliQuizIntro.style.display = "none";
     questionContainer.style.display = "none";
     resultsContainer.style.display = "none";
     scoresContainer.style.display = "none";
+    timerContainer.style.display = "none";
 }
 
-
+// This function resets all variables
+function resetVars() {
+    clearInterval(timer);
+    score = 0;
+    yourInitials.value = "";
+    selectQuiz.removeAttribute('disabled');
+}
 
 // All of our listeners will live here
 selectQuiz.addEventListener('change',toggleQuiz);
