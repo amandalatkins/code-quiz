@@ -100,7 +100,11 @@ function startQuiz(e) {
 }
 
 function toggleQuizSelector() {
-
+    // disabled the selector if it's not
+    selectQuiz.setAttribute('disabled','');
+    //enabled the selector if it's disabled and reset the values
+    selectQuiz.removeAttribute('disabled');
+    selectQuiz.value = "";
 }
 
 function setTimer() {
@@ -265,11 +269,11 @@ function loadQuizResults() {
 //Save the high score in local storage
 function saveScore(e) {
     // Let's grab our stored scores
-    var getScores = localStorage.getItem('scores');
+    var getScores = JSON.parse(localStorage.getItem('scores'));
     
     // If there are scores stored, let's overwite our highScores array with them
     if (getScores) {
-        highScores = JSON.parse(getScores);
+        highScores = getScores;
     }
 
     //Now based on which quiz, let's store our score
@@ -279,17 +283,22 @@ function saveScore(e) {
         } else {
             highScores.jsquiz = [saveScoreArray()];
         }
-
     } else if (activeQuiz == "California") {
         if (highScores.caquiz) {
             highScores.caquiz.push(saveScoreArray());
         } else {
             highScores.caquiz = [saveScoreArray()];
         }
-    }  
+    } 
+
+    // Sort the scores in order of highest to lowest if there are multiple entries
+    if (highScores.jsquiz.length > 1) {
+        highScores.jsquiz.sort(function(a, b) {
+            return parseInt(b.score) - parseInt(a.score);
+        });
+    }
     
     localStorage.setItem('scores',JSON.stringify(highScores));
-    localStorage.setItem('test','test');
 
     showHighScores();
 }
@@ -306,6 +315,7 @@ function showHighScores() {
     resetVars();
     theScores.innerHTML = "";
     var getScores = JSON.parse(localStorage.getItem('scores'));
+
     scoresContainer.style.display = "block";
     if (!getScores) {
         var newP = document.createElement('p');
