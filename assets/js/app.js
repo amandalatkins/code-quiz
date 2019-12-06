@@ -36,10 +36,10 @@ var currentQuestionInfo;
 // This will hold the time left. Set the starting time based on how many questions there are.
 var timeLeft;
 var timer;
-var secondsPerQuestion = 15;
+var secondsPerQuestion = 1;
 var score = 0;
 var activeQuiz;
-var highScores = [];
+var highScores = {};
 
 // Add a click istener to the Start button
 // startBtn.addEventListener('click', startQuiz);
@@ -246,29 +246,30 @@ function saveScore(e) {
         highScores = JSON.parse(getScores);
     }
 
-    // Now based on which quiz, let's store our scores
+    //Now based on which quiz, let's store our score
     if (activeQuiz == "JavaScript") {
         console.log('active quiz is javascript');
-        if (highScores.javascript) {
+        if (highScores.jsquiz) {
             console.log('found some scores for js already');
-            highScores.javascript.push(saveScoreArray());
+            highScores.jsquiz.push(saveScoreArray());
         } else {
             console.log('no js, saving into new node');
             console.log(yourInitials.value+ ": "+finalScore.textContent);
-            highScores.javascript = [saveScoreArray()];
+            highScores.jsquiz = [saveScoreArray()];
         }
 
     } else if (activeQuiz == "California") {
-        if (highScores.california) {
-            highScores.california.push(saveScoreArray());
+        if (highScores.caquiz) {
+            highScores.caquiz.push(saveScoreArray());
         } else {
-            highScores.california = [saveScoreArray()];
+            highScores.caquiz = [saveScoreArray()];
         }
     }  
 
     console.log(highScores);
     
     localStorage.setItem('scores',JSON.stringify(highScores));
+    localStorage.setItem('test','test');
 
     showHighScores();
 }
