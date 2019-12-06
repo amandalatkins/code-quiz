@@ -130,6 +130,8 @@ function loadQuestion() {
 
     currentQuestionInfo = questions[currentQuestion];
 
+    questionText.textContent = currentQuestionInfo.title;
+
     // for each answer choice, do the following...
     for (var i = 0; i < currentQuestionInfo.choices.length; i++) {
         // Create a div and set its class to 'choice'
@@ -171,6 +173,9 @@ function checkAnswer(e) {
 
 // This function handles a correct answer
 function logCorrectAnswer(target) {
+    // Disable the choices so user doesn't accidentally hit another button
+    disableChoices();
+
     target.classList.add('btn-success');
     score++;
     // PLAY CORRECT SOUND ***
@@ -179,6 +184,9 @@ function logCorrectAnswer(target) {
 
 // This function handles an incorrect answer
 function logIncorrectAnswer(target) {
+    // Disable the choices so user doesn't accidentally hit another button
+    disableChoices();
+
     target.classList.add('btn-danger');
 
     // PLAY INCORRECT SOUND ***
@@ -194,6 +202,12 @@ function logIncorrectAnswer(target) {
         }
     }
     nextQuestion();
+}
+
+function disableChoices() {
+    for (var i = 0; i < choicesContainer.children.length; i++) {
+        choicesContainer.children[i].children[0].setAttribute('disabled','');
+    }
 }
 
 //calls the loadQuestion function after .8 seconds
