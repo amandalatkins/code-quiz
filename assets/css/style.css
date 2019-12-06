@@ -1,5 +1,10 @@
-#timerContainer, #codeQuizIntro, #caliQuizIntro, #questionContainer,#quizResults,#highScores {
+#timeLeftContainer, #codeQuizIntro, #caliQuizIntro, #questionContainer,#quizResults,#highScores {
     display: none;
+}
+
+#selectQuiz {
+    max-width: 250px;
+    font-size: 1.5em;
 }
 
 .choice > button {
@@ -25,6 +30,8 @@
     left: 25px;
 }
 
-#timerContainer {
+#timeLeftContainer {
     font-weight: 700;
+    font-size: 1.5em;
+    margin-left: 10px
 }  

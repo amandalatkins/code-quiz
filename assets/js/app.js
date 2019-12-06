@@ -4,13 +4,13 @@ var questionContainer = document.querySelector('#questionContainer');
 var choicesContainer = document.querySelector('#choices');
 var resultsContainer = document.querySelector('#quizResults');
 var selectQuizContainer = document.querySelector('#selectQuizContainer');
-var timerContainer = document.querySelector('#timerContainer');
+var timerContainer = document.querySelector('#timeLeftContainer');
 var timeLeftContainer = document.querySelector('#timeLeft');
 var codeQuizIntro = document.querySelector('#codeQuizIntro');
 var caliQuizIntro = document.querySelector('#caliQuizIntro');
-
 var scoresContainer = document.querySelector('#highScores');
 
+var selectQuiz = document.querySelector('#selectQuiz');
 var questionText = document.querySelector('#question');
 
 var finalScore = document.querySelector('#finalScore');
@@ -21,38 +21,98 @@ var submitScore = document.querySelector('#submitScore');
 
 var scoresList = document.querySelector('#scoresList');
 
-// Initialize global variables
-
 // This will store the active quiz
 var activeQuiz;
+
+//This will hold our questions array once a quiz is chosen
+var questions = [];
 
 // Set current question to -1 so we can have loadQuestion function queue up question 0
 var currentQuestion = -1;
 var currentQuestionInfo;
 
-
-
 // This will hold the time left. Set the starting time based on how many questions there are.
-var timeLeft = questions.length * 15;
+var timeLeft;
+var timer;
+var secondsPerQuestion = 15;
 var score = 0;
-
-
-
-// Go ahead and show the total time on the frontend
-timerContainer.textContent = timeLeft;
+var activeQuiz;
 
 // Add a click istener to the Start button
-startBtn.addEventListener('click', startQuiz);
+// startBtn.addEventListener('click', startQuiz);
 
 // Add a click listener to the choicesContainer
 choicesContainer.addEventListener('click',checkAnswer);
 
+// Toggles the quiz intro
+function toggleQuiz(e) {
+    activeQuiz = e.target.value;
+    if (activeQuiz == "JavaScript") {
+
+        // Display the correct intro
+        codeQuizIntro.style.display="block";
+        caliQuizIntro.style.display="none";
+
+        // Set the questions and timeLeft
+        questions = codeQuestions;
+        timeLeft = questions.length * secondsPerQuestion;
+        timeLeftContainer.textContent = timeLeft;
+
+
+    } else if (activeQuiz == "California") {
+
+        // Display the correct intro
+        codeQuizIntro.style.display="none";
+        caliQuizIntro.style.display="block";
+
+        // Set the questions and timeLeft
+        questions = caliQuestions;
+        timeLeft = questions.length * secondsPerQuestion;
+        timeLeftContainer.textContent = timeLeft;
+    }
+}
+
 // Function to kick off the quiz
 function startQuiz(e) {
-    // Hide the intro
-    intro.style.display = "none";
-    // Run loadQuestion function
-    loadQuestion();
+
+    if (e.target.matches('button')) {
+        // Hide all the intro containers
+        for(var i = 0; i < intro.children.length; i++) {
+            intro.children[i].style.display = "none";
+        }
+
+        // Show the timer and set it;
+        timerContainer.style.display = "block";
+        setTimer();
+
+        // Run loadQuestion function
+        loadQuestion();
+    }
+}
+
+function setTimer() {
+    // set an interval to run every 1 second
+    timer = setInterval(function() {
+        //Subtract one from the timeLeft and display it on the frontend
+        timeLeft--;
+        timeLeftContainer.textContent = timeLeft;
+
+        if (timeLeft <= 3) {
+            
+            if (timeLeft === 0) {
+                // PLAY GAME OVER SOUND ***
+            } else {
+                // PLAY WARNING SOUND ***
+            }
+        }
+
+        // When the time left gets to zero, clear the interval and end the quiz
+        if (timeLeft === 0) {
+            clearInterval(timer);
+            endQuiz();
+        }
+    }, 1000)
+    
 }
 
 //This function loads a question and choices into our DOM
@@ -69,7 +129,6 @@ function loadQuestion() {
     }
 
     currentQuestionInfo = questions[currentQuestion];
-    questionText.textContent = currentQuestionInfo.title;
 
     // for each answer choice, do the following...
     for (var i = 0; i < currentQuestionInfo.choices.length; i++) {
@@ -114,6 +173,7 @@ function checkAnswer(e) {
 function logCorrectAnswer(target) {
     target.classList.add('btn-success');
     score++;
+    // PLAY CORRECT SOUND ***
     nextQuestion();
 }
 
@@ -121,27 +181,36 @@ function logCorrectAnswer(target) {
 function logIncorrectAnswer(target) {
     target.classList.add('btn-danger');
 
+    // PLAY INCORRECT SOUND ***
+
+    // Deduct some time from the timer
+    timeLeft += -5;
+
     //Let's also highlight what the correct answer was by looping all the choices until we find the one that matches the answer
     var options = document.querySelectorAll('.choice');
     for (var i = 0; i < options.length; i++) {
         if (options[i].children[0].textContent == currentQuestionInfo.answer) {
             options[i].children[0].classList.add('btn-success');
         }
-    }r
+    }
     nextQuestion();
 }
 
-//calls the loadQuestion function after 1 second
+//calls the loadQuestion function after .8 seconds
 function nextQuestion() {
     setTimeout(function() {
         loadQuestion();
-    }, 1000);
+    }, 800);
 }
 
 //Ends the quiz and calculates score
 function endQuiz() {
-    // Hide the question div
+    // In case the time is still running, clear it
+    clearInterval(timer);
+
+    // Hide the question and timer divs
     questionContainer.style.display = "none";
+    timerContainer.style.display = "none";
     loadQuizResults();
 }
 
@@ -153,3 +222,9 @@ function loadQuizResults() {
     resultsContainer.style.display = "block";
 }
 
+
+
+// All of our listeners will live here
+selectQuiz.addEventListener('change',toggleQuiz);
+codeQuizIntro.addEventListener('click',startQuiz);
+caliQuizIntro.addEventListener('click',startQuiz);

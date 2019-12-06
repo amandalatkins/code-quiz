@@ -12,7 +12,15 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" id="quizTitle">Quiz Master 2019</a>
+        <select class="form-control" id="selectQuiz">
+            <option value="" selected disabled>Select a quiz...</option>
+            <option value="JavaScript">JavaScript Quiz</option>
+            <option value="California">California Quiz</option>
+        </select>
+
+        <div id="timeLeftContainer">
+            Time Left: <span class="text-danger" id="timeLeft"></span>
+        </div>
         
         <ul class="ml-auto navbar-nav">
             <li class="nav-item"><a href="#" id="viewScores" class="nav-link">View High Scores</a></li>
@@ -26,34 +34,25 @@
         <div class="row">
             <div class="col-md-2 col-lg-3"></div>
             <div class="col-md-8 col-lg-6" id="quizContainer">
-                <div>
-                    <div id="selectQuizContainer">
-                        <select class="form-control mx-auto" id="selectQuiz">
-                            <option value="" selected disabled>Select a quiz...</option>
-                            <option value="javascript">JavaScript</option>
-                            <option value="california">California</option>
-                        </select>
+                
+                <div id="intro">
+                    <div id="codeQuizIntro">
+                        <h1 class="my-3">JavaScript Quiz</h1>
+                        <p class="my-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat justo id metus interdum, eu aliquam urna semper. Suspendisse elementum enim eros, sit amet ornare nisl lacinia varius. Vivamus felis leo, varius eget maximus at, sollicitudin vitae ipsum. Donec eu sagittis quam. Suspendisse potenti.</p>
+                        <p><button class="btn btn-primary start-button" data-quiz-id="javascript">Start Quiz!</button></p>
                     </div>
-                    <p id="timerContainer">
-                        Time Left: <span class="text-danger" id="timeLeft"></span>
-                    </p>            
-                </div>
-                <div id="codeQuizIntro">
-                    <h1>JavaScript Quiz</h1>
-                    <p class="my-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat justo id metus interdum, eu aliquam urna semper. Suspendisse elementum enim eros, sit amet ornare nisl lacinia varius. Vivamus felis leo, varius eget maximus at, sollicitudin vitae ipsum. Donec eu sagittis quam. Suspendisse potenti.</p>
-                    <p><button class="btn btn-primary" data-quiz-id="javascript">Start Quiz!</button></p>
-                </div>
-                <div id="caliQuizIntro">
-                    <h1>California Quiz</h1>
-                    <p class="my-3">Think you know a lot about our great state? Put your knowledge to the test with this California quiz!</p>
-                    <p><button class="btn btn-primary" data-quiz-id="california">Start Quiz!</button></p>
+                    <div id="caliQuizIntro">
+                        <h1 class="my-3">California Quiz</h1>
+                        <p class="my-3">Think you know a lot about our great state? Put your knowledge to the test with this California quiz!</p>
+                        <p><button class="btn btn-primary start-button" data-quiz-id="california">Start Quiz!</button></p>
+                    </div>
                 </div>
                 <div id="questionContainer">
-                    <h3 id="question"></h3>
+                    <h3 id="question" class="my-3"></h3>
                     <div id="choices"></div>
                 </div>
                 <div id="quizResults">
-                    <h1>Quiz Complete</h1>
+                    <h1 class="my-3">Quiz Complete</h1>
                     <p class="my-3">Your score: <span id="finalScore"></span></p>
                     <input type="text" id="yourInitials" class="form-control"/><button id="submitScore" class="btn btn-primary">Submit</button>
                 </div>
