@@ -310,6 +310,11 @@ function saveScore(e) {
             return parseInt(b.score) - parseInt(a.score);
         });
     }
+    if (highScores.caquiz.length > 1) {
+        highScores.caquiz.sort(function(a, b) {
+            return parseInt(b.score) - parseInt(a.score);
+        });
+    }
     
     localStorage.setItem('scores',JSON.stringify(highScores));
 
@@ -326,6 +331,7 @@ function saveScoreArray() {
 function showHighScores() {
     clearPage();
     resetVars();
+    resetQuizSelectorVal();
     theScores.innerHTML = "";
     var getScores = JSON.parse(localStorage.getItem('scores'));
 
@@ -346,7 +352,7 @@ function showHighScores() {
         secondH4.textContent = "California Quiz Scores";
         theScores.append(secondH4);
         var secondUl = document.createElement('ul');
-        generateScoresLi(secondUl, getScores.caliquiz);
+        generateScoresLi(secondUl, getScores.caquiz);
         theScores.append(secondUl);
     }
 }
@@ -380,6 +386,7 @@ function clearPage() {
 function resetVars() {
     clearInterval(timer);
     score = 0;
+    currentQuestion = -1;
     yourInitials.value = "";
     selectQuiz.removeAttribute('disabled');
     timeWarning = false;
@@ -389,7 +396,13 @@ function resetVars() {
 function startOver() {
     clearPage();
     resetVars();
+    resetQuizSelectorVal();
     introContainer.style.display = "block";
+}
+
+//resets the value of the quiz selector
+function resetQuizSelectorVal() {
+    selectQuiz.value = "";
 }
 
 // Clears the scores and refreshes the high scores div
