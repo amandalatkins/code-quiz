@@ -15,13 +15,13 @@ This is an application that runs numerous quizzes to test a user's knowledge. Th
 Copy the repository link.
 
 ```
-https://github.com/amandalatkins/password-generator.git
+https://github.com/amandalatkins/code-quiz.git
 ```
 
 Clone the repository to your local development environment
 
 ```
-git clone https://github.com/amandalatkins/password-generator.git
+git clone https://github.com/amandalatkins/code-quiz.git
 ```
 
 Open ``index.html`` in your prefered web browser
