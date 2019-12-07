@@ -44,6 +44,8 @@ var score = 0;
 var activeQuiz;
 var highScores = {jsquiz: [], caquiz: []};
 var timeWarning = false;
+var questionTimer;
+var timeElapsed;
 
 // Setup our sound effects
 var correctSound = new Audio('assets/sounds/correct.mp3');
@@ -151,6 +153,14 @@ function loadQuestion() {
     // Empty the choices container
     resetChoices();
 
+    // Initialize a variable to track how much time has elapsed since the user got the question
+    timeElapsed = 0;
+
+    // Set an interval to track the time elapsed
+    questionTimer = setInterval(function() {
+        timeElapsed++;
+    },1000);
+
     //Load the next question
     currentQuestion++;
 
@@ -207,8 +217,22 @@ function logCorrectAnswer(target) {
     // Disable the choices so user doesn't accidentally hit another button
     disableChoices();
 
+    // Stop the question timer interval
+    clearInterval(questionTimer);
+
+    // Give them 1 point for answering correctly
     target.classList.add('btn-success');
     score++;
+    
+    //If they answer within 5 seconds, give them a bonus point
+    if (timeElapsed <= 5) {
+        score++;
+    }
+
+    //Bonus bonus!
+    if (timeElapsed <= 2) {
+        score++;
+    }
     
     // Play sound
     correctSound.play();
@@ -274,8 +298,9 @@ function endQuiz() {
 
 //Load the quiz results
 function loadQuizResults() {
-    // Display the final score as a percentage because that's prettier
-    finalScore.textContent = Math.round((score / questions.length)*100) + "%";
+    console.log(questions.length);
+    // Display the final score
+    finalScore.textContent = score;
     // Now display the results container
     resultsContainer.style.display = "block";
 }
