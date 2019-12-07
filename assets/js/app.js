@@ -20,6 +20,9 @@ var initials = document.querySelector('#yourInitials');
 var startBtn = document.querySelector('#startQuiz');
 var submitScore = document.querySelector('#submitScore');
 var viewScores = document.querySelector('#viewScores');
+var startOverBtn = document.querySelector('#startOver');
+var startOverAlso = document.querySelector('#startOverAlso');
+var clearScoresBtn = document.querySelector('#clearScores');
 
 var theScores = document.querySelector('#theScores');
 
@@ -101,10 +104,13 @@ function startQuiz(e) {
 
 function toggleQuizSelector() {
     // disabled the selector if it's not
-    selectQuiz.setAttribute('disabled','');
-    //enabled the selector if it's disabled and reset the values
-    selectQuiz.removeAttribute('disabled');
-    selectQuiz.value = "";
+    if (!selectQuiz.hasAttribute('disabled')) {
+        selectQuiz.setAttribute('disabled','');
+    } else {
+        //enabled the selector if it's disabled and reset the values
+        selectQuiz.removeAttribute('disabled');
+        selectQuiz.value = "";
+    }
 }
 
 function setTimer() {
@@ -261,7 +267,7 @@ function endQuiz() {
 //Load the quiz results
 function loadQuizResults() {
     // Display the final score as a percentage because that's prettier
-    finalScore.textContent = (score / questions.length)*100 + "%";
+    finalScore.textContent = Math.round((score / questions.length)*100) + "%";
     // Now display the results container
     resultsContainer.style.display = "block";
 }
@@ -371,9 +377,24 @@ function resetVars() {
     selectQuiz.removeAttribute('disabled');
 }
 
+// Starts over at the very beginning
+function startOver() {
+    clearPage();
+    resetVars();
+    introContainer.style.display = "block";
+}
+
+function clearScores() {
+    localStorage.removeItem('scores');
+    showHighScores();
+}
+
 // All of our listeners will live here
 selectQuiz.addEventListener('change',toggleQuiz);
 codeQuizIntro.addEventListener('click',startQuiz);
 caliQuizIntro.addEventListener('click',startQuiz);
 submitScore.addEventListener('click',saveScore);
 viewScores.addEventListener('click',showHighScores);
+startOverBtn.addEventListener('click',startOver);
+startOverAlso.addEventListener('click',startOver);
+clearScoresBtn.addEventListener('click',clearScores);
