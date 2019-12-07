@@ -39,10 +39,11 @@ var currentQuestionInfo;
 // This will hold the time left. Set the starting time based on how many questions there are.
 var timeLeft;
 var timer;
-var secondsPerQuestion = 3;
+var secondsPerQuestion = 15;
 var score = 0;
 var activeQuiz;
 var highScores = {};
+var timeWarning = false;
 
 // Setup our sound effects
 var correctSound = new Audio('assets/sounds/correct.mp3');
@@ -124,10 +125,13 @@ function setTimer() {
         timeLeftContainer.textContent = timeLeft;
             
         // If there are 10 seconds left, warn the player
-        if (timeLeft === 10) {
-            // play Retro game tone, musical warning 1
-            warningSound.play();
-            timeLeftContainer.classList.add('text-danger');
+        if (timeLeft <= 10) {
+            // If the player hasn't been warned yet
+            if (!timeWarning) {
+                warningSound.play();
+                timerContainer.classList.add('bg-danger');
+                timeWarning = true;
+            }
         }
 
         // When the time left gets to zero, clear the interval and end the quiz
@@ -156,7 +160,7 @@ function loadQuestion() {
 
     currentQuestionInfo = questions[currentQuestion];
 
-    questionText.textContent = currentQuestionInfo.title;
+    questionText.innerHTML = currentQuestionInfo.title;
 
     // for each answer choice, do the following...
     for (var i = 0; i < currentQuestionInfo.choices.length; i++) {
@@ -167,7 +171,7 @@ function loadQuestion() {
         // Create a button and set its text content to the choice
         var newButton = document.createElement('button');
         newButton.setAttribute('class','btn btn-secondary');
-        newButton.textContent = currentQuestionInfo.choices[i];
+        newButton.innerHTML = currentQuestionInfo.choices[i];
 
         // Append the button to the choice div and append the choice div to the choicesContainer
         newChoice.appendChild(newButton);
@@ -245,21 +249,24 @@ function disableChoices() {
 //calls the loadQuestion function after .8 seconds
 function nextQuestion() {
     setTimeout(function() {
-        loadQuestion();
+        // Make sure the timer didn't run out while we were waiting
+        if (timeLeft > 0) {
+            loadQuestion();
+        }
     }, 800);
 }
 
 //Ends the quiz and calculates score
 function endQuiz() {
-    // In case the time is still running, clear it
+    // In case the timer is still running, clear it.
     clearInterval(timer);
-
-    // If the time didn't run out, let's play a happier quiz over sound
+    
+    // If we finished the quiz without the timer running out, let's play a happier quiz over sound
     if (timeLeft > 0) {
         successSound.play();
     }
 
-    // Clear the page
+    // Clear the page and load the results
     clearPage();
     loadQuizResults();
 }
@@ -375,6 +382,7 @@ function resetVars() {
     score = 0;
     yourInitials.value = "";
     selectQuiz.removeAttribute('disabled');
+    timeWarning = false;
 }
 
 // Starts over at the very beginning
@@ -384,6 +392,7 @@ function startOver() {
     introContainer.style.display = "block";
 }
 
+// Clears the scores and refreshes the high scores div
 function clearScores() {
     localStorage.removeItem('scores');
     showHighScores();

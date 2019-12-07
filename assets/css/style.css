@@ -33,14 +33,25 @@
 #timeLeftContainer {
     font-weight: 700;
     font-size: 1.5em;
-    margin-left: 10px
-}  
+    margin-left: 10px;
+    max-width: 200px;
+    margin: 0 auto;
+}
 
+#timeLeftContainer {
+    color: #777;
+}   
+
+#timeLeftContainer.bg-danger {
+    color: #fff;
+}
 
 @media screen and (max-width: 767px) {
     #selectQuiz {
         max-width: 100%;
-        /* width: 100%; */
         text-align: center;
+    }
+    .choice > button {
+        width: 100%;
     }
 }
