@@ -132,6 +132,7 @@ function setTimer() {
                 timerContainer.classList.add('bg-danger');
                 timeWarning = true;
             }
+            // Don't do anything if the player has already received the warning
         }
 
         // When the time left gets to zero, clear the interval and end the quiz
