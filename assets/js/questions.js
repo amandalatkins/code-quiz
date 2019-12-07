@@ -2,7 +2,7 @@ var codeQuestions = [
     {
       title: "Commonly used data types DO NOT include:",
       choices: ["strings", "booleans", "alerts", "numbers"],
-      answer: "numbers"
+      answer: "alerts"
     },
     {
       title: "The condition in an if / else statement is enclosed within ____.",
@@ -39,7 +39,7 @@ var codeQuestions = [
 
 var caliQuestions = [
   {
-    title: "What is the name of the tallest mountain in Californi that is also the tallest in the contiguous 48 states?",
+    title: "What is the name of the tallest mountain in California that is also the tallest in the contiguous 48 states?",
     choices: ["Mt. Whitney", "Mt. Baldy", "Mt. Tamalpais", "Mt. Shasta"],
     answer: "Mt. Whitney"
   },
@@ -69,11 +69,6 @@ var caliQuestions = [
     answer: "Yosemite National Park"
   },
   {
-    title: "Which of California's national parks caused John Muir to pen, \"By far the grandest of all the special temples of nature I was ever permitted to enter.\"",
-    choices: ["Sequoia National Park", "Death Valley National Park", "Joshua Tree National Park", "Yosemite National Park"],
-    answer: "Yosemite National Park"
-  },
-  {
     title: "What is the largest city in California?",
     choices: ["San Francisco", "Fresno", "San Diego", "Los Angeles"],
     answer: "Los Angeles"
@@ -81,7 +76,12 @@ var caliQuestions = [
   {
     title: "This region is not only considered the lowest point in the contiguous 48 states, but also the hottest and driest.",
     choices: ["Death Valley", "San Bernardino County", "San Joaquin Valley", "Camp Pendleton"],
-    answer: "Los Angeles"
+    answer: "Death Valley"
+  },
+  {
+    title: "Which California city was destroyed in 1906 by an earthquake and subsequent fires?",
+    choices: ["San Diego", "San Francisco", "Sacramento", "Santa Barbera"],
+    answer: "San Francisco"
   }
 
 ];
