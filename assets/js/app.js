@@ -42,7 +42,7 @@ var timer;
 var secondsPerQuestion = 15;
 var score = 0;
 var activeQuiz;
-var highScores = {};
+var highScores = {jsquiz: [], caquiz: []};
 var timeWarning = false;
 
 // Setup our sound effects
@@ -291,17 +291,9 @@ function saveScore(e) {
 
     //Now based on which quiz, let's store our score
     if (activeQuiz == "JavaScript") {
-        if (highScores.jsquiz) {
-            highScores.jsquiz.push(saveScoreArray());
-        } else {
-            highScores.jsquiz = [saveScoreArray()];
-        }
+        highScores.jsquiz.push(saveScoreArray());
     } else if (activeQuiz == "California") {
-        if (highScores.caquiz) {
-            highScores.caquiz.push(saveScoreArray());
-        } else {
-            highScores.caquiz = [saveScoreArray()];
-        }
+        highScores.caquiz.push(saveScoreArray());
     } 
 
     // Sort the scores in order of highest to lowest if there are multiple entries
