@@ -47,7 +47,7 @@ Open ``index.html`` in your prefered web browser
 
 The following snippet shows the function that sets the quiz timer.
 
-```
+```javascript
     function setTimer() {
     // Just in case there's an interval already set, let's clear it
     clearInterval(timer);
